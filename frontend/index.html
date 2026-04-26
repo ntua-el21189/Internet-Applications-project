@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta charset="UTF-8"> -->
+    <title>MovieLens App</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<h1 style="color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+    Movie Recs 
+    <i class="fa-solid fa-clapperboard" style="color:rgb(129, 184, 94);" ></i>
+</h1>
+<div class="two-columns">
+  <section id="search">
+    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        What movies are you rooting for?
+    </h2>
+    <input type="text" id="searchInput" placeholder="Enter keyword">
+    <button onclick="searchMovies()">Search</button>
+    <div class="tableFixHeadSearch">
+        <table id="moviesTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genres</th>
+                <th>Rate</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    </div>
+  </section>
+
+  <section id="rated">
+    <h2>Your Rated Movies</h2>
+    <div class="tableFixHead">
+        <table id="myRatingsTable"> 
+            <thead>
+                <tr><th>Title</th><th>My Rating</th></tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+  </section>
+</div>
+
+<!-- ADD MOVIE -->
+<section class="scroller">
+  <div class="scroller">
+  <div class="scroller-inner">
+    <span>
+      Action   |   Adventure  |  Animation  |  Children's&#127812;|  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
+    </span>
+    <span>
+      Action  |  Adventure  |  Animation  |  Children's&#127812; |  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
+    </span>
+  </div>
+</div>
+</section>
+<section>
+    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+        Grow Our Collection! 
+    </h2>
+    <input type="text" id="titleInput" placeholder="Movie Title">
+    <input type="text" id="genresInput" placeholder="Genres (Action|Drama)">
+    <button onclick="addMovie()">Add Movie</button>
+    <p id="addMovieMsg"></p>
+</section>
+
+<!-- RECOMMENDATIONS -->
+<section>
+    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        The fruits of our labor
+        <button onclick="getRecommendations()">Get Recommendations</button>
+    </h2>
+    
+
+    <table id="recommendationsTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genres</th>
+                <th>Predicted Rating</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+
+<script src="index.js"></script>
+
+</body>
+</html>

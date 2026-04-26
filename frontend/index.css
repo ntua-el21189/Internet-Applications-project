@@ -1,0 +1,196 @@
+body {
+    font-family: Georgia, serif;
+    margin: 20px 20px 20px 20px;
+    background-color: #131d00;
+}
+
+h1 {
+    margin-top: 15px;   
+    margin-bottom: 30px; 
+    margin-left: 20px;
+}
+
+section {
+    background: rgb(129, 184, 94);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+input {
+    border-radius: 5px;
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    font-family: Georgia, serif;
+    padding: 8px 12px;
+    border: 1px solid #e0ffce;
+    border-radius: 12px;
+    background-color:#c0cd6f;
+    cursor: pointer;
+}
+
+/*
+Source - https://stackoverflow.com/a/47923622
+Posted by Roko C. Buljan, modified by community. See post 'Timeline' for change history
+Retrieved 2026-04-21, License - CC BY-SA 4.0
+*/
+
+.tableFixHead { 
+    overflow: auto; 
+    max-height: 400px; /* Matches the 400px of .tableFixHeadSearch */
+    margin-top: 54px;  /* Pushes it down to account for the input/button on the left */
+    border: 1px solid #e0ffce; 
+}
+.tableFixHead thead th { 
+    position: sticky; 
+    top: 0; 
+    z-index: 2; 
+    border-top: none;
+ }
+
+.tableFixHeadSearch{ 
+    overflow: auto; 
+    max-height: 400px;
+    margin-top: 20px; 
+    border: 1px solid #e0ffce; 
+}
+
+.tableFixHeadSearch thead th { 
+    position: sticky; 
+    top: 0; 
+    z-index: 2; 
+    border-top: none; }
+
+table {
+    width: 100%;
+    margin-top: 0px;
+    border: 1px solid#e0ffce;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th {
+    background: #c0cd6f;
+    border: 1px solidv#e0ffce;
+    padding: 10px;
+    text-align: center;
+}
+
+td {
+    border: 1px solid #e0ffce;
+    padding: 8px;
+    text-align: left;
+}
+
+tr:hover {
+    background-color:   rgb(145, 191, 119);
+    /* background-color:rgb(162, 217, 254); */
+}
+
+/* --- CSS για Ομαλό Άνοιγμα Συρταριού (Smooth Drawer) --- */
+.drawer-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 15px;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+}
+
+.drawer-content.open {
+    max-height: 300px; 
+    padding: 15px;     
+}
+
+/* Αφαιρούμε το padding από το κελί για να αναλάβει το div */
+tr.ratings-drawer td {
+    padding: 0;
+    border: none;
+}
+.scroller {
+  width: 100%;
+  overflow: hidden;
+  background: rgb(67, 104, 45);
+  padding: 4px 0;
+}
+
+.scroller-inner {
+  display: flex;
+  width: max-content;  
+  direction: ltr;
+  animation: scroll 38s linear infinite ;
+}
+
+.scroller-inner span {
+  white-space: nowrap;  /* prevents wrapping */
+  padding-right: 22px;
+  word-spacing: 22px; 
+  font-size: 16px;
+  color: #fffdfd;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 4fr 1fr; 
+  gap: 20px;
+}
+
+/* optional: make it responsive (stack on small screens) */
+@media (max-width: 768px) {
+  .two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+#myRatingsTable th:nth-child(1),
+#myRatingsTable td:nth-child(1) {
+  width: 60%;   /* Movie title */
+}
+
+#myRatingsTable th:nth-child(2),
+#myRatingsTable td:nth-child(2) {
+  width: 40%;   /* Rating + button */
+}
+
+h2 {
+    display: flex;
+    align-items: center; /* Κρατάει το κείμενο και το κουμπί στην ίδια ευθεία κάθετα */
+}
+
+h2 button {
+    margin-left: auto; /* Το "auto" είναι το μαγικό τρικ που σπρώχνει το κουμπί τέρμα δεξιά! */
+}
+
+/* --- SMOOTH SEARCH BOX --- */
+#searchInput, #titleInput, #genresInput {
+    background-color: transparent; /* Makes the background clear */
+    border: 2px solid #e0ffce; /* Uses your dark green background color for the border */
+    border-radius: 25px; /* Gives it smooth, pill-like rounded edges */
+    padding: 6px 10px; /* Gives the text more breathing room inside the box */
+    color: #1a2b10; /* Text color when typing */
+    font-size: 16px;
+    outline: none; /* Removes the harsh default blue ring when clicked */
+    transition: all 0.3s ease; /* Makes any changes (like hovering/clicking) smooth */
+    font-family: inherit;
+}
+
+/* Optional: Make the placeholder text ("Enter keyword") look a bit softer */
+#searchInput::placeholder, #titleInput::placeholder, #genresInput::placeholder {
+    color: rgba(26, 43, 16, 0.6); 
+}
+
+/* Optional: Add a subtle glow/highlight effect when the user clicks to type */
+#searchInput:focus, #titleInput:focus, #genresInput:focus {
+    background-color: rgba(255, 255, 255, 0.1); /* Adds a very faint white tint when active */
+    box-shadow: 0 0 8px rgba(26, 43, 16, 0.3); /* Soft dark green glow */
+}
+
