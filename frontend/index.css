@@ -1,9 +1,18 @@
 body {
-    font-family: Georgia, serif;
-    margin: 20px 20px 20px 20px;
-    background-color: #090f00;
+  background-image: url("./rob-laughter-WW1jsInXgwM-unsplash.jpg");
+  background-size: cover; 
+  background-position: center;   
+  background-repeat: no-repeat;  
+  background-attachment: fixed;  
 }
-
+/* Dark overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* adjust darkness (0.3–0.8) */
+  z-index: -1;
+}
 h1 {
     margin-top: 15px;   
     margin-bottom: 30px; 
@@ -11,7 +20,7 @@ h1 {
 }
 
 section {
-    background: rgb(129, 184, 94);
+    /* background: rgba(4, 0, 0, 0.889); */
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 8px;
@@ -26,9 +35,9 @@ input {
 button {
     font-family: Georgia, serif;
     padding: 8px 12px;
-    border: 1px solid #e0ffce;
-    border-radius: 12px;
-    background-color:#c0cd6f;
+    border: 1px solid #ceffff;
+    border-radius: 2px;
+    background-color:#cdc56f;
     cursor: pointer;
 }
 
@@ -42,7 +51,9 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
     overflow: auto; 
     max-height: 400px; /* Matches the 400px of .tableFixHeadSearch */
     margin-top: 54px;  /* Pushes it down to account for the input/button on the left */
-    border: 1px solid #e0ffce; 
+    border: 1px solid #fff8ce; 
+    border-radius: 15px;
+    box-shadow: 0 0 4px rgba(255, 231, 46, 0.821);
 }
 .tableFixHead thead th { 
     position: sticky; 
@@ -55,9 +66,34 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
     overflow: auto; 
     max-height: 400px;
     margin-top: 20px; 
-    border: 1px solid #e0ffce; 
+    border: 1px solid #fff8ce; 
+    border-radius: 15px;
+    box-shadow: 0 0 4px rgba(255, 231, 46, 0.821);
+}
+/* Scroll bar styling */
+.tableFixHead::-webkit-scrollbar,
+.tableFixHeadSearch::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
 }
 
+.tableFixHead::-webkit-scrollbar-track,
+.tableFixHeadSearch::-webkit-scrollbar-track {
+    background: rgba(171, 171, 171, 0.097);
+    border-radius: 0px;
+}
+
+.tableFixHead::-webkit-scrollbar-thumb,
+.tableFixHeadSearch::-webkit-scrollbar-thumb {
+    background: rgb(43, 0, 0);
+    border-radius: 20px;
+}
+
+.tableFixHead::-webkit-scrollbar-thumb:hover,
+.tableFixHeadSearch::-webkit-scrollbar-thumb:hover {
+    background: rgba(38, 35, 7, 0.87);
+}
+/* End of scroll bar styling */
 .tableFixHeadSearch thead th { 
     position: sticky; 
     top: 0; 
@@ -67,26 +103,30 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
 table {
     width: 100%;
     margin-top: 0px;
-    border: 1px solid#e0ffce;
+    border: 1px solid#cefdff;
+    border-radius: 15px;
+    box-shadow: 0 0 4px rgba(255, 231, 46, 0.821);
     border-collapse: separate;
     border-spacing: 0;
+    background-color: #150000be;
 }
 
 th {
-    background: #c0cd6f;
-    border: 1px solidv#e0ffce;
+    background: rgb(106, 0, 0);;
+    border: 2px solidv#e0ffce;
     padding: 10px;
     text-align: center;
 }
 
 td {
-    border: 1px solid #e0ffce;
+    border: 1px solid #cefff7;
     padding: 8px;
     text-align: left;
+    color: #fff9dd;
 }
 
 tr:hover {
-    background-color:   rgb(145, 191, 119);
+    background-color:   rgba(65, 57, 57, 0.255);
     /* background-color:rgb(162, 217, 254); */
 }
 
@@ -111,7 +151,7 @@ tr.ratings-drawer td {
 .scroller {
   width: 100%;
   overflow: hidden;
-  background: rgb(67, 104, 45);
+  background: rgba(255, 235, 80, 0.615);
   padding: 4px 0;
 }
 
@@ -173,10 +213,10 @@ h2 button {
 /* --- SMOOTH SEARCH BOX --- */
 #searchInput, #titleInput, #genresInput {
     background-color: transparent; /* Makes the background clear */
-    border: 2px solid #e0ffce; /* Uses your dark green background color for the border */
+    border: 2px solid #cefffe; /* Uses your dark green background color for the border */
     border-radius: 25px; /* Gives it smooth, pill-like rounded edges */
     padding: 6px 10px; /* Gives the text more breathing room inside the box */
-    color: #1a2b10; /* Text color when typing */
+    color: #fff9dd; /* Text color when typing */
     font-size: 16px;
     outline: none; /* Removes the harsh default blue ring when clicked */
     transition: all 0.3s ease; /* Makes any changes (like hovering/clicking) smooth */
@@ -185,12 +225,12 @@ h2 button {
 
 /* Optional: Make the placeholder text ("Enter keyword") look a bit softer */
 #searchInput::placeholder, #titleInput::placeholder, #genresInput::placeholder {
-    color: rgba(26, 43, 16, 0.6); 
+    color: #fff9dd; 
 }
 
 /* Optional: Add a subtle glow/highlight effect when the user clicks to type */
 #searchInput:focus, #titleInput:focus, #genresInput:focus {
-    background-color: rgba(255, 255, 255, 0.1); /* Adds a very faint white tint when active */
-    box-shadow: 0 0 8px rgba(26, 43, 16, 0.3); /* Soft dark green glow */
+    background-color: rgba(255, 239, 182, 0.04); /* Adds a very faint white tint when active */
+    box-shadow: 0 0 8px rgba(255, 231, 46, 0.928); /* Soft dark green glow */
 }
 

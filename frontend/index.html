@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-<h1 style="color: rgb(255, 255, 255); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+<h1 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
     Movie Recs 
-    <i class="fa-solid fa-clapperboard" style="color:rgb(129, 184, 94);" ></i>
+    <i class="fa-solid fa-clapperboard" style="color:rgba(255, 250, 96, 0.853);" ></i>
 </h1>
 <div class="two-columns">
   <section id="search">
-    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
-        What movies are you rooting for?
+    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        Search Movies
     </h2>
     <input type="text" id="searchInput" placeholder="Enter keyword">
     <button onclick="searchMovies()">Search</button>
@@ -35,7 +35,8 @@
   </section>
 
   <section id="rated">
-    <h2>Your Rated Movies</h2>
+     <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        Your Rated Movies</h2>
     <div class="tableFixHead">
         <table id="myRatingsTable"> 
             <thead>
@@ -53,16 +54,16 @@
   <div class="scroller">
   <div class="scroller-inner">
     <span>
-      Action   |   Adventure  |  Animation  |  Children's&#127812;|  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
+      Action   |   Adventure  |  Animation  |  Children's |  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
     </span>
     <span>
-      Action  |  Adventure  |  Animation  |  Children's&#127812; |  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
+      Action  |  Adventure  |  Animation  |  Children's |  Comedy  |  Crime  |  Documentary  |  Drama  | Fantasy  |  Film-Noir  |  Horror  |  Musical  |  Mystery  |  Romance  |  Sci-Fi  |  Thriller  |  War  |  Western |
     </span>
   </div>
 </div>
 </section>
 <section>
-    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
         Grow Our Collection! 
     </h2>
     <input type="text" id="titleInput" placeholder="Movie Title">
@@ -73,7 +74,7 @@
 
 <!-- RECOMMENDATIONS -->
 <section>
-    <h2 style="color: rgb(14, 22, 0); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
         The fruits of our labor
         <button onclick="getRecommendations()">Get Recommendations</button>
     </h2>
