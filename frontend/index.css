@@ -80,18 +80,18 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
 .tableFixHead::-webkit-scrollbar-track,
 .tableFixHeadSearch::-webkit-scrollbar-track {
     background: rgba(171, 171, 171, 0.097);
-    border-radius: 0px;
+    border-radius: 60px;
 }
 
 .tableFixHead::-webkit-scrollbar-thumb,
 .tableFixHeadSearch::-webkit-scrollbar-thumb {
     background: rgb(43, 0, 0);
-    border-radius: 20px;
+    border-radius: 0px;
 }
 
 .tableFixHead::-webkit-scrollbar-thumb:hover,
 .tableFixHeadSearch::-webkit-scrollbar-thumb:hover {
-    background: rgba(38, 35, 7, 0.87);
+    background: rgba(30, 3, 3, 0.954);
 }
 /* End of scroll bar styling */
 .tableFixHeadSearch thead th { 
@@ -112,7 +112,7 @@ table {
 }
 
 th {
-    background: rgb(106, 0, 0);;
+    background: rgb(93, 0, 0);;
     border: 2px solidv#e0ffce;
     padding: 10px;
     text-align: center;
@@ -126,7 +126,7 @@ td {
 }
 
 tr:hover {
-    background-color:   rgba(65, 57, 57, 0.255);
+    background-color:   rgba(255, 241, 83, 0.113);
     /* background-color:rgb(162, 217, 254); */
 }
 
