@@ -10,7 +10,7 @@
 <body>
 <h1 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
     Movie Recs 
-    <i class="fa-solid fa-clapperboard" style="color:rgba(255, 250, 96, 0.853);" ></i>
+    <i class="fa-solid fa-film" style="color:rgb(227, 205, 63);" ></i>
 </h1>
 <div class="two-columns">
   <section id="search">
@@ -50,7 +50,7 @@
 </div>
 
 <!-- ADD MOVIE -->
-<section class="scroller">
+<section>
   <div class="scroller">
   <div class="scroller-inner">
     <span>
@@ -62,7 +62,7 @@
   </div>
 </div>
 </section>
-<section>
+<section id="addMovieSection">
     <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
         Grow Our Collection! 
     </h2>
@@ -79,8 +79,8 @@
         <button onclick="getRecommendations()">Get Recommendations</button>
     </h2>
     
-
-    <table id="recommendationsTable">
+<div class="tableFixHeadSearch">
+        <table id="recommendationsTable">
         <thead>
             <tr>
                 <th>Title</th>
@@ -90,6 +90,7 @@
         </thead>
         <tbody></tbody>
     </table>
+    </div>
 </section>
 
 <script src="index.js"></script>

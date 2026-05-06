@@ -18,9 +18,9 @@ async function searchMovies() {
         // Ελέγχουμε αν ο χρήστης έχει ήδη βαθμολογήσει αυτή την ταινία
         const hasRated = userRatings.some(r => Number(r.movieId) === Number(m.movieId));
         
-        // Αν την έχει βαθμολογήσει, φτιάχνουμε το μανιτάρι με το tooltip. Αλλιώς, το αφήνουμε κενό.
+        // Αν την έχει βαθμολογήσει, φτιάχνουμε το αστεράκι με το tooltip. Αλλιώς, το αφήνουμε κενό.
         const ratedIcon = hasRated 
-            ? ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#127812;</span>` 
+            ? ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#11088;</span>` 
             : "";
 
         return `
@@ -50,7 +50,8 @@ function rateMovie(movieId, isUpdate, buttonElement) {
         return;
     }
     const row = ratingInput.closest("tr");
-    const title = row.cells[0].innerText.replace('🍄', '').trim();
+    // Αφαιρούμε το αστεράκι από τον τίτλο κατά την αποθήκευση
+    const title = row.cells[0].innerText.replace('⭐', '').trim();
 
     const existingIndex = userRatings.findIndex(r => r.movieId === movieId);
     
@@ -64,8 +65,9 @@ function rateMovie(movieId, isUpdate, buttonElement) {
     
     if (!isUpdate && row) {
         const titleCell = row.cells[0];
-        if (!titleCell.innerHTML.includes('&#127812;')) {
-            titleCell.innerHTML += ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#127812;</span>`;
+        // Ελέγχουμε και προσθέτουμε το αστεράκι αν δεν υπάρχει
+        if (!titleCell.innerHTML.includes('&#11088;')) {
+            titleCell.innerHTML += ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#11088;</span>`;
         }
     }
 
@@ -79,6 +81,7 @@ function rateMovie(movieId, isUpdate, buttonElement) {
     
     console.log("Current Session Ratings:", userRatings);
 }
+
 function getRatedMovies(){
     const tbody = document.querySelector("#myRatingsTable tbody");
     if (!tbody) return;
@@ -118,7 +121,7 @@ async function addMovie() {
         msg.style.color = "white";
         
     } else {
-        msg.innerHTML = `❌ ${data.detail || "Something went wrong"}`;
+        msg.innerHTML = `${data.detail || "Something went wrong"}`;
         msg.style.color = "red";
     }
 }
@@ -154,7 +157,7 @@ async function viewRatings(movieId, buttonElement) {
             return;
         }
 
-        const drawerBgColor = " rgb(162, 168, 100)"; // <-- Βάλε εδώ ό,τι χρώμα θέλεις! (π.χ. #24577b, #aadbfa, ή rgb)
+        const drawerBgColor = " rgba(80, 0, 0, 0.91)"; 
 
         const drawerRow = document.createElement("tr");
         drawerRow.className = "ratings-drawer";
@@ -163,7 +166,7 @@ async function viewRatings(movieId, buttonElement) {
                 <div class="drawer-content">
                     <h4 style="margin-top:15px; color: #ffffff;">All User Ratings for this Movie</h4>
                     <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e2fcff; margin-bottom: 15px;">
-                        <table style="width: 100%; margin: 0; background-color:  rgb(129, 184, 94);">
+                        <table style="width: 100%; margin: 0; background-color:  rgb(86, 6, 6);">
                             <thead style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th style="padding: 5px; background-color:rgb(185, 195, 119); border-bottom: 1px solid #e2fcff;">User ID</th>
@@ -258,7 +261,6 @@ async function getRecommendations() {
         btn.disabled = false;
     }
 }
-
 
 const searchInput = document.getElementById("searchInput");
 
