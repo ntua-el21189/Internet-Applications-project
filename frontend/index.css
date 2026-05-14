@@ -38,7 +38,7 @@ button {
     padding: 8px 12px;
     border: 1px solid #fff788; 
     box-shadow: 0px 0px 5px rgba(164, 255, 250, 0.966);
-    border-radius: 4px;
+    border-radius: 5px;
     background-color:  rgba(253, 236, 85, 0.867);
     cursor: pointer;
 }
@@ -98,8 +98,7 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
 .drawer-content div::-webkit-scrollbar-track {
     background: rgba(30, 0, 0, 0.4); 
     border-radius: 10px;
-    border: 0.5px solid #7c5a18;
-    box-shadow: 0 0 5px #fafecbea;
+    box-shadow: inset 0 0 5px #fafecbea;
     margin-top: 25px;   
     margin-bottom: 15px;
 }
@@ -177,7 +176,7 @@ tr.ratings-drawer td {
 .scroller {
     width: 100%;
     overflow: hidden; 
-    background: rgba(231, 197, 85, 0.775);
+    background: rgba(245, 222, 91, 0.808);
     padding: 6px 0;
     box-shadow: 0px 0px 8px rgba(255, 231, 46, 0.966);
     border-radius: 9px;
@@ -276,3 +275,67 @@ h2 button {
     margin: 0;
     min-height: 20px; /* Κρατάει λίγο σταθερό χώρο για να μην "χοροπηδάει" η σελίδα όταν εμφανίζεται κείμενο */
 }
+
+/* --- VISUAL STAR RATING SLIDER --- */
+/* --- VISUAL STAR RATING SLIDER --- */
+.star-rating {
+  --size: 1.5rem;
+  --val: 0;
+  --hover-val: var(--val); /* Νέα μεταβλητή για το preview του hover */
+  --color: #e6da55; /* Το κανονικό χρυσό χρώμα */
+  
+  --mask: conic-gradient(from -18deg at 61% 34.5%, #0000 108deg, #000 0) 0 0 / var(--size) var(--size),
+      conic-gradient(from 270deg at 39% 34.5%, #0000 108deg, #000 0) 0 0 / var(--size) var(--size),
+      conic-gradient(from 54deg at 68% 56%, #0000 108deg, #000 0) 0 0 / var(--size) var(--size),
+      conic-gradient(from 198deg at 32% 56%, #0000 108deg, #000 0) 0 0 / var(--size) var(--size),
+      conic-gradient(from 126deg at 50% 69%, #0000 108deg, #000 0) 0 0 / var(--size) var(--size);
+      
+  /* Εδώ λέμε στο background να γεμίζει μέχρι το hover-val και να παίρνει το χρώμα του --color */
+  --background: linear-gradient(90deg, var(--color) calc(var(--size) * var(--hover-val)), rgba(255, 255, 255, 0.2) 0);
+  
+  height: var(--size);
+  width: calc(5 * var(--size));
+  appearance: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Όταν το ποντίκι είναι πάνω, τα αστέρια γίνονται αχνά! */
+.star-rating:hover {
+  --color: rgba(218, 208, 99, 0.63); 
+}
+
+/* Chrome and Safari */
+.star-rating::-webkit-slider-runnable-track {
+  height: 100%;
+  mask: var(--mask);
+  mask-composite: intersect;
+  background: var(--background);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Firefox */
+.star-rating::-moz-range-track {
+  height: 100%;
+  mask: var(--mask);
+  mask-composite: intersect;
+  background: var(--background); /* Διορθώθηκε από --bg σε --background */
+  print-color-adjust: exact;
+}
+
+/* Εξαφανίζουμε την κλασική "μπίλια" του slider για να πατάς κατευθείαν στα αστέρια */
+.star-rating::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+}
+.star-rating::-moz-range-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+  border: 0;
+}
+

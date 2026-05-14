@@ -15,21 +15,19 @@ async function searchMovies() {
     tableBody.innerHTML = ""; // Clear previous results
     
     tableBody.innerHTML = data.movies.map(m => {
-        // Ελέγχουμε αν ο χρήστης έχει ήδη βαθμολογήσει αυτή την ταινία
-        const hasRated = userRatings.some(r => Number(r.movieId) === Number(m.movieId));
-        
-        // Αν την έχει βαθμολογήσει, φτιάχνουμε το αστεράκι με το tooltip. Αλλιώς, το αφήνουμε κενό.
-        const ratedIcon = hasRated 
-            ? ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#11088;</span>` 
-            : "";
-
         return `
             <tr>
-                <td>${m.title}${ratedIcon}</td>
+                <td>${m.title}</td>
                 <td>${m.genres}</td>
-                <td>
-                   <input type="number" min="0" max="5" step="0.5" id="r${m.movieId}" onkeydown="return false;" style="width: 50px; text-align: center;">
-                    <button onclick="rateMovie(${m.movieId},false,this)" style="margin-left: 10px;">Rate</button>
+                <td style="text-align: center; vertical-align: middle;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                        <input type="range" class="star-rating" min="0" max="5" step="0.5" id="r${m.movieId}" value="0" style="--val: 0;"
+                            onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
+                            onmouseleave="this.style.setProperty('--hover-val', this.value)"
+                            oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
+                            onchange="rateMovie(${m.movieId}, false, null); showSavedMessage(this);">
+                        <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Saved!</span>
+                    </div>
                 </td>
                 <td style="text-align: center; vertical-align: middle;">
                     Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
@@ -50,8 +48,7 @@ function rateMovie(movieId, isUpdate, buttonElement) {
         return;
     }
     const row = ratingInput.closest("tr");
-    // Αφαιρούμε το αστεράκι από τον τίτλο κατά την αποθήκευση
-    const title = row.cells[0].innerText.replace('⭐', '').trim();
+    const title = row.cells[0].innerText.trim();
 
     const existingIndex = userRatings.findIndex(r => r.movieId === movieId);
     
@@ -62,14 +59,6 @@ function rateMovie(movieId, isUpdate, buttonElement) {
     }
     sessionStorage.setItem("userRatings", JSON.stringify(userRatings));
     getRatedMovies();
-    
-    if (!isUpdate && row) {
-        const titleCell = row.cells[0];
-        // Ελέγχουμε και προσθέτουμε το αστεράκι αν δεν υπάρχει
-        if (!titleCell.innerHTML.includes('&#11088;')) {
-            titleCell.innerHTML += ` <span title="You have rated this movie" style="cursor: help; font-size: 1.2em;">&#11088;</span>`;
-        }
-    }
 
     if (buttonElement) {
         const originalText = buttonElement.innerText;
@@ -94,9 +83,15 @@ function getRatedMovies(){
     tbody.innerHTML = userRatings.map(r => `
         <tr>
             <td>${r.title}</td>
-            <td style="text-align: center;">
-                <input type="number" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" onkeydown="return false;" style="width: 50px; text-align: center;">
-                <button onclick="rateMovie(${r.movieId}, true)" style="margin-left: 10px;">Update Rating</button>
+            <td style="text-align: center; vertical-align: middle;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                    <input type="range" class="star-rating" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" style="--val: ${r.rating};"
+                        onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
+                        onmouseleave="this.style.setProperty('--hover-val', this.value)"
+                        oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
+                        onchange="rateMovie(${r.movieId}, true, null); showSavedMessage(this);">
+                    <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Updated!</span>
+                </div>
             </td>
         </tr>
     `).join("");
@@ -157,7 +152,7 @@ async function viewRatings(movieId, buttonElement) {
             return;
         }
 
-        const drawerBgColor = " rgba(80, 0, 0, 0.91)"; 
+        const drawerBgColor = " rgba(80, 0, 0, 0.78)"; 
 
         const drawerRow = document.createElement("tr");
         drawerRow.className = "ratings-drawer";
@@ -169,8 +164,8 @@ async function viewRatings(movieId, buttonElement) {
                         <table style="width: 100%; margin: 0; background-color:  rgb(86, 6, 6);">
                             <thead style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
-                                    <th style="padding: 5px; background-color:rgb(185, 195, 119); border-bottom: 1px solid #e2fcff;">User ID</th>
-                                    <th style="padding: 5px; background-color: rgb(185, 195, 119); border-bottom: 1px solid #e2fcff;">Rating</th>
+                                    <th style="padding: 5px; background-color:rgba(253, 236, 85, 0.867); border-bottom: 1px solid #e2fcff;">User ID</th>
+                                    <th style="padding: 5px; background-color: rgba(253, 236, 85, 0.867); border-bottom: 1px solid #e2fcff;">Rating</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -190,7 +185,7 @@ async function viewRatings(movieId, buttonElement) {
         // Βάζουμε τη γραμμή στο DOM
         currentRow.parentNode.insertBefore(drawerRow, currentRow.nextSibling);
 
-        // ΜΙΚΡΟ ΤΡΙΚ: Ζητάμε από τον browser να διαβάσει το ύψος πριν του βάλουμε την κλάση "open", 
+        //Ζητάμε από τον browser να διαβάσει το ύψος πριν του βάλουμε την κλάση "open", 
         // για να προλάβει να καταλάβει ότι πρέπει να κάνει animation!
         const drawerDiv = drawerRow.querySelector(".drawer-content");
         void drawerDiv.offsetWidth; 
@@ -245,7 +240,7 @@ async function getRecommendations() {
                 <tr>
                     <td>${m.title}</td>
                     <td>${m.genres}</td>
-                    <td style="text-align: center; font-weight: bold; font-size: 1.0em; color: #010f2d;">
+                    <td style="text-align: center; font-weight: bold; font-size: 1.0em; color: #e9e892;">
                         ${m.predictedRating.toFixed(2)}
                     </td>
                 </tr>
@@ -271,4 +266,17 @@ if (searchInput) {
             searchMovies();         
         }
     });
+}
+
+function showSavedMessage(inputElement) {
+    // Βρίσκει το <span> "Saved!" που είναι ακριβώς δίπλα/κάτω από τα αστέρια
+    const msgSpan = inputElement.nextElementSibling;
+    if (msgSpan && msgSpan.classList.contains("save-msg")) {
+        msgSpan.style.opacity = "1"; // Το εμφανίζει
+        
+        // Το εξαφανίζει ξανά μετά από 1.5 δευτερόλεπτο
+        setTimeout(() => {
+            msgSpan.style.opacity = "0";
+        }, 1500);
+    }
 }
