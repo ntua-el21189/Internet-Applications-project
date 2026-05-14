@@ -8,17 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-<h1 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+<h1 style="color:#fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
         Movie Recs 
-    <i class="fa-solid fa-film" style="color:rgb(227, 205, 63);" ></i>
+    <i class="fa-solid fa-film" style="color:rgba(255, 238, 105, 0.823);" ></i>
     </h1>
 <div class="two-columns">
   <section id="search">
-    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+    <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
         Search Movies
     </h2>
     <input type="text" id="searchInput" placeholder="Enter keyword">
-    <button onclick="searchMovies()">Search</button>
+    <button onclick="searchMovies()" title="Search" style="background: none; border: none; color:rgb(255, 251, 210); font-size: 1.2em; cursor: pointer; padding: 0; margin-left: 5px;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
     <div class="tableFixHeadSearch">
         <table id="moviesTable">
         <thead>
@@ -35,7 +37,7 @@
   </section>
 
   <section id="rated">
-     <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+     <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
         Your Rated Movies</h2>
     <div class="tableFixHead">
         <table id="myRatingsTable"> 
@@ -50,7 +52,7 @@
 </div>
 
 <!-- ADD MOVIE -->
-<section>
+<section id="scroller">
   <div class="scroller">
   <div class="scroller-inner">
     <span>
@@ -63,20 +65,20 @@
 </div>
 </section>
 <section id="addMovieSection">
-    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
+    <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
         Grow Our Collection! 
     </h2>
     <input type="text" id="titleInput" placeholder="Movie Title">
     <input type="text" id="genresInput" placeholder="Genres (Action|Drama)">
-    <button onclick="addMovie()">Add Movie</button>
+    <button id="addMovieBtn" onclick="addMovie()">Add Movie</button>
     <p id="addMovieMsg"></p>
 </section>
 
 <!-- RECOMMENDATIONS -->
-<section>
-    <h2 style="color: rgb(255, 253, 235); display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
-        The fruits of our labor
-        <button onclick="getRecommendations()">Get Recommendations</button>
+<section id="recom">
+    <h2 style="color:#fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        Our recommendations for you
+        <button id="getRecommendationsBtn" onclick="getRecommendations()">Get Recommendations</button>
     </h2>
     
 <div class="tableFixHeadSearch">

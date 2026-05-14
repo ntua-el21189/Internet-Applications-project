@@ -3,7 +3,8 @@ body {
   background-size: cover; 
   background-position: center;   
   background-repeat: no-repeat;  
-  background-attachment: fixed;  
+  background-attachment: fixed;
+    
 }
 /* Dark overlay */
 body::before {
@@ -19,27 +20,48 @@ h1 {
     margin-left: 20px;
 }
 
-section {
-    /* background: rgba(4, 0, 0, 0.889); */
+section#search, section#recom {
+    margin-left: 60px;
+    margin-top:40px;
+    margin-bottom:20px;
+}
+section#rated {
+    margin-right: 60px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    margin-top:40px;
+}
+section#scroller {
     padding: 10px;
+    margin-top:30px;
     margin-bottom: 20px;
     border-radius: 8px;
 }
-
+section#addMovieSection {
+    margin-left: 60px;
+    margin-top:55px;
+    margin-bottom:75px;
+}
 input {
     border-radius: 5px;
     padding: 8px;
     margin: 5px;
 }
-
-button {
+button{
     font-family: Georgia, serif;
-    font-size: 14px;
+    font-size: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+button#addMovieBtn ,button#getRecommendationsBtn {
+    font-family: Georgia, serif;
+    font-size: 12px;
     padding: 8px 12px;
     border: 1px solid #fff788; 
     box-shadow: 0px 0px 5px rgba(164, 255, 250, 0.966);
     border-radius: 5px;
-    background-color:  rgba(253, 236, 85, 0.867);
+    background-color:rgba(255, 221, 68, 0.757);
+    /* background-color:  rgba(253, 236, 85, 0.867); */
     cursor: pointer;
 }
 
@@ -53,7 +75,7 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
     overflow: auto; 
     max-height: 400px; /* Matches the 400px of .tableFixHeadSearch */
     margin-top: 82px;  /* Pushes it down to account for the input/button on the left */
-    border: 1px solid #fff8ce; 
+    border: 1px solid #fef4b7; 
     border-radius: 15px;
     box-shadow: 0 0 4px rgba(255, 231, 46, 0.821);
 }
@@ -82,7 +104,7 @@ Retrieved 2026-04-21, License - CC BY-SA 4.0
 .tableFixHeadSearch,
 .drawer-content div {
     scrollbar-width: thin;
-    scrollbar-color: #cdc56f rgba(30, 0, 0, 0.5);
+    scrollbar-color: #918d64ae rgba(30, 0, 0, 0.5);
 }
 /* Chrome, Edge, Safari */
 .tableFixHead::-webkit-scrollbar,
@@ -176,10 +198,11 @@ tr.ratings-drawer td {
 .scroller {
     width: 100%;
     overflow: hidden; 
-    background: rgba(245, 222, 91, 0.808);
+    background: rgba(245, 204, 56, 0.725);
     padding: 6px 0;
-    box-shadow: 0px 0px 8px rgba(255, 231, 46, 0.966);
+    box-shadow: 0px 0px 8px rgb(231, 195, 51);
     border-radius: 9px;
+    border-color: rgb(157, 123, 38);
 }
 
 .scroller-inner {
@@ -243,7 +266,7 @@ h2 button {
 /* --- SMOOTH SEARCH BOX --- */
 #searchInput, #titleInput, #genresInput {
     background-color: transparent; /* Makes the background clear */
-    border: 2px solid #f8ffce; /* Uses your dark green background color for the border */
+    border: 2px solid #fffbb6; /* Uses your dark green background color for the border */
     border-radius: 25px; /* Gives it smooth, pill-like rounded edges */
     padding: 6px 10px; /* Gives the text more breathing room inside the box */
     color: #fff9dd; /* Text color when typing */

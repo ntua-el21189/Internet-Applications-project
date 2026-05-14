@@ -31,7 +31,9 @@ async function searchMovies() {
                 </td>
                 <td style="text-align: center; vertical-align: middle;">
                     Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
-                    <button onclick="viewRatings(${m.movieId}, this)" style="margin-top: 8px;">View Ratings</button>
+                    <button onclick="viewRatings(${m.movieId}, this)" title="View more ratings" style="background: none; border: none; color:rgb(250, 245, 194); font-size: 1.1em; cursor: pointer; padding: 0; margin-top: 8px;">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
                 </td>
             </tr>
         `;
@@ -130,21 +132,21 @@ async function viewRatings(movieId, buttonElement) {
         
         if (drawerDiv.classList.contains("open")) {
             drawerDiv.classList.remove("open"); // Κλείνει ομαλά
-            buttonElement.innerText = "Ratings";
+            buttonElement.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
         } else {
             drawerDiv.classList.add("open"); // Ανοίγει ομαλά
-            buttonElement.innerText = "Hide Ratings";
+            buttonElement.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
         }
         return;
     }
 
-    buttonElement.innerText = "Loading...";
+    buttonElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
     try {
         const res = await fetch(`${API}/ratings/${movieId}`);
         const data = await res.json();
 
-        buttonElement.innerText = "Hide Ratings";
+        buttonElement.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
 
         if (!data.ratings || data.ratings.length === 0) {
             alert("No ratings found for this movie.");
@@ -152,14 +154,14 @@ async function viewRatings(movieId, buttonElement) {
             return;
         }
 
-        const drawerBgColor = " rgba(80, 0, 0, 0.78)"; 
+        const drawerBgColor = " rgba(38, 1, 1, 0.78)"; 
 
         const drawerRow = document.createElement("tr");
         drawerRow.className = "ratings-drawer";
         let html = `
             <td colspan="4" style="background-color: ${drawerBgColor}; padding: 0;">
                 <div class="drawer-content">
-                    <h4 style="margin-top:15px; color: #ffffff;">All User Ratings for this Movie</h4>
+                    <h4 style="margin-top:15px; color:  rgb(255, 253, 235);">All User Ratings for this Movie</h4>
                     <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e2fcff; margin-bottom: 15px;">
                         <table style="width: 100%; margin: 0; background-color:  rgb(86, 6, 6);">
                             <thead style="position: sticky; top: 0; z-index: 1;">
@@ -208,7 +210,7 @@ async function getRecommendations() {
     
     const btn = document.querySelector("button[onclick='getRecommendations()']");
     const originalText = btn.innerText;
-    btn.innerText = "Finding best movies for you... ⏳";
+    btn.innerText = "Finding best movies for you... ";
     btn.disabled = true; // disable the button to prevent multiple clicks while waiting for the response
     
     try {
