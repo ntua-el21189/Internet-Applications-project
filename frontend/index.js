@@ -154,20 +154,23 @@ async function viewRatings(movieId, buttonElement) {
             return;
         }
 
-        const drawerBgColor = " rgba(38, 1, 1, 0.78)"; 
+        const drawerBgColor = " rgba(38, 1, 1, 0.63)"; 
 
         const drawerRow = document.createElement("tr");
         drawerRow.className = "ratings-drawer";
+        
+        // Φτιάχνουμε την HTML "καθαρή" χωρίς inline χρώματα, 
+        // για να πάρει αυτόματα το design του εξωτερικού πίνακα!
         let html = `
-            <td colspan="4" style="background-color: ${drawerBgColor}; padding: 0;">
+            <td colspan="4" style="background-color: rgba(0, 0, 0, 0.3); padding: 0; border: none;">
                 <div class="drawer-content">
-                    <h4 style="margin-top:15px; color:  rgb(255, 253, 235);">All User Ratings for this Movie</h4>
-                    <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e2fcff; margin-bottom: 15px;">
-                        <table style="width: 100%; margin: 0; background-color:  rgb(86, 6, 6);">
-                            <thead style="position: sticky; top: 0; z-index: 1;">
+                    <h4 style="margin-top: 15px; margin-bottom: 15px; color:#fff9dd;">User Ratings for this Movie</h4>
+                    <div style="max-height: 160px; overflow-y: auto; margin-bottom: 20px; border-radius: 15px;">
+                        <table style="margin: 0;">
+                            <thead style="position: sticky; top: 0; z-index: 2;">
                                 <tr>
-                                    <th style="padding: 5px; background-color:rgba(253, 236, 85, 0.867); border-bottom: 1px solid #e2fcff;">User ID</th>
-                                    <th style="padding: 5px; background-color: rgba(253, 236, 85, 0.867); border-bottom: 1px solid #e2fcff;">Rating</th>
+                                    <th>User ID</th>
+                                    <th>Rating</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -177,13 +180,14 @@ async function viewRatings(movieId, buttonElement) {
             html += `
                 <tr>
                     <td style="text-align: center; padding: 5px;">User ${r.userId}</td>
-                    <td style="text-align: center; padding: 5px; font-weight: bold;">${r.rating} / 5</td>
+                    <td style="text-align: center; padding: 5px; font-weight: bold; color: #fff9dd;">
+                        ${r.rating} / 5
+                    </td>
                 </tr>`;
         });
 
         html += `</tbody></table></div></div></td>`;
         drawerRow.innerHTML = html;
-
         // Βάζουμε τη γραμμή στο DOM
         currentRow.parentNode.insertBefore(drawerRow, currentRow.nextSibling);
 
@@ -201,20 +205,17 @@ async function viewRatings(movieId, buttonElement) {
 }
 
 async function getRecommendations() {
-    
     if (userRatings.length === 0) {
         alert("Please rate at least one movie first so we can learn your taste!");
         return;
     }
 
-    
     const btn = document.querySelector("button[onclick='getRecommendations()']");
-    const originalText = btn.innerText;
-    btn.innerText = "Finding best movies for you... ";
-    btn.disabled = true; // disable the button to prevent multiple clicks while waiting for the response
+    const originalHTML = btn.innerHTML; // Κρατάμε το εικονίδιο + κείμενο
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Finding...';
+    btn.disabled = true; 
     
     try {
-        // prepare request body
         const payload = {
             ratings: userRatings.map(r => ({
                 movieId: Number(r.movieId),
@@ -231,8 +232,6 @@ async function getRecommendations() {
         });
 
         const data = await res.json();
-        
-        // display recommendations
         const tbody = document.querySelector("#recommendationsTable tbody");
         
         if (!data.recommendations || data.recommendations.length === 0) {
@@ -242,32 +241,28 @@ async function getRecommendations() {
                 <tr>
                     <td>${m.title}</td>
                     <td>${m.genres}</td>
-                    <td style="text-align: center; font-weight: bold; font-size: 1.0em; color: #e9e892;">
-                        ${m.predictedRating.toFixed(2)}
+                    <td style="text-align: center; font-weight: bold; font-size: 1.1em; color: #fff9dd;">
+                        ${m.predictedRating.toFixed(2)} / 5
                     </td>
                 </tr>
             `).join("");
         }
 
+        // Εμφανίζουμε το Pop-up!
+        document.getElementById("recommendationsOverlay").style.display = "flex";
+
     } catch (error) {
         console.error("Σφάλμα στα Recommendations:", error);
         alert("Something went wrong in the backend. Check the console.");
     } finally {
-        // Ό,τι και να γίνει, επαναφέρουμε το κουμπί στην αρχική του μορφή
-        btn.innerText = originalText;
+        btn.innerHTML = originalHTML; // Επαναφορά κουμπιού
         btn.disabled = false;
     }
 }
 
-const searchInput = document.getElementById("searchInput");
-
-if (searchInput) {
-    searchInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); 
-            searchMovies();         
-        }
-    });
+// Συνάρτηση για να κλείνει το Pop-up
+function closeRecommendations() {
+    document.getElementById("recommendationsOverlay").style.display = "none";
 }
 
 function showSavedMessage(inputElement) {

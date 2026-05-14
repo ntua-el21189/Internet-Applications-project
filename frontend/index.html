@@ -65,37 +65,54 @@
 </div>
 </section>
 <section id="addMovieSection">
-    <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
-        Grow Our Collection! 
-    </h2>
-    <input type="text" id="titleInput" placeholder="Movie Title">
-    <input type="text" id="genresInput" placeholder="Genres (Action|Drama)">
-    <button id="addMovieBtn" onclick="addMovie()">Add Movie</button>
-    <p id="addMovieMsg"></p>
-</section>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+        
+        <div>
+            <h2 style="color:  #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin-top: 0;"> 
+                Grow Our Collection! 
+            </h2>
+            <input type="text" id="titleInput" placeholder="Movie Title">
+            <input type="text" id="genresInput" placeholder="Genres (Action|Drama)">
+            <button id="addMovieBtn" onclick="addMovie()">Add Movie</button>
+            <p id="addMovieMsg"></p>
+        </div>
 
-<!-- RECOMMENDATIONS -->
-<section id="recom">
-    <h2 style="color:#fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
-        Our recommendations for you
-        <button id="getRecommendationsBtn" onclick="getRecommendations()">Get Recommendations</button>
-    </h2>
-    
-<div class="tableFixHeadSearch">
-        <table id="recommendationsTable">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Genres</th>
-                <th>Predicted Rating</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <div>
+            <button id="getRecommendationsBtn" onclick="getRecommendations()" style="margin-bottom: 27px;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Get Recommendations
+            </button>
+        </div>
+
     </div>
 </section>
 
-<script src="index.js"></script>
+<div id="recommendationsOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.925); z-index: 99999; display: none; justify-content: center; align-items: center;">
+    
+    <div class="tutorial-content" style="max-width: 800px; width: 90%; padding: 20px 30px;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="color:  #fff9c8; margin: 0;">Your Recommended Movies </h2>
+            <button onclick="closeRecommendations()" title="Close" style="background: none; border: none; color: #fff9dd; font-size: 1.5em; cursor: pointer; padding: 0;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="tableFixHead" style="margin-top: 0; max-height: 350px;">
+            <table id="recommendationsTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Genres</th>
+                        <th>Predicted Rating</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
+    </div>
+</div>
+
+<script src="index.js"></script>
 </body>
 </html>
