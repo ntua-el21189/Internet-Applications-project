@@ -17,11 +17,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 @app.get("/")
-def search_movies():
+async def search_movies():
     return {"genres": VALID_GENRES}
 
 @app.get("/movielens/api/movies")
-def search_movies(search: str, db: Session = Depends(get_db)):
+async def search_movies(search: str, db: Session = Depends(get_db)):
     rows = db.execute(
         text("""
             SELECT m.movieId, m.title, m.genres, AVG(r.rating) as avg_rating
@@ -41,7 +41,7 @@ def search_movies(search: str, db: Session = Depends(get_db)):
     return {"status": 200, "movies": movies}
 
 @app.get("/movielens/api/ratings/{movieId}")
-def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
+async def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
     rows = db.execute(
         text("""
             SELECT userId, rating, timestamp
@@ -59,7 +59,7 @@ def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
 
 
 @app.post("/movielens/api/movies")
-def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
+async def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
     input_genres = movie.genres.split('|') 
     for g in input_genres:
         if g not in VALID_GENRES:
@@ -103,7 +103,7 @@ def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
         )
     
 @app.post("/movielens/api/recommendations")
-def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db)):
+async def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db)):
     my_ratings = {r.movieId: r.rating for r in req.ratings}
     
     if not my_ratings:
