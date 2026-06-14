@@ -37,7 +37,6 @@ def search_movies(search: str, db: Session = Depends(get_db)):
         {"movieId": r[0], "title": r[1], "genres": r[2], "avg_rating": round(r[3], 2) if r[3] is not None else 0.0}
         for r in rows
     ]
-
     return {"status": 200, "movies": movies}
 
 @app.get("/movielens/api/ratings/{movieId}")
