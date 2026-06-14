@@ -197,12 +197,12 @@ tr.ratings-drawer td {
     border: none;
 }
 .scroller {
-    border: 0.5px solid #7c5a18;
+    border: 1px solid #ae7e1d;
     box-shadow: 0 0 7px #fafecbea;
     padding: 6px;
     width: 100%;
     overflow: hidden; 
-    background:#ddd05bbe;
+    background:#e4ca44be;
     padding: 6px 0;
     /* box-shadow: 0px 0px 8px rgb(231, 195, 51); */
     border-radius: 9px;
@@ -267,16 +267,16 @@ h2 button {
     margin-left: auto; /* Σπρώχνει το κουμπί προς τα δεξιά */
 }
 
-/* --- SMOOTH SEARCH BOX --- */
+/* --- SEARCH BOX --- */
 #searchInput, #titleInput, #genresInput {
-    background-color: transparent; /* Makes the background clear */
-    border: 2px solid #fffbb6; /* Uses your dark green background color for the border */
-    border-radius: 25px; /* Gives it smooth, pill-like rounded edges */
+    background-color: transparent; 
+    border: 2px solid #fffba6; 
+    border-radius: 25px;
     padding: 6px 10px; /* Gives the text more breathing room inside the box */
     color: #fff9dd; /* Text color when typing */
     font-size: 16px;
-    outline: none; /* Removes the harsh default blue ring when clicked */
-    transition: all 0.3s ease; /* Makes any changes (like hovering/clicking) smooth */
+    outline: none; /* Removes the blue ring when clicked */
+    transition: all 0.3s ease; 
     font-family: inherit;
 }
 

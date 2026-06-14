@@ -2,12 +2,82 @@ const API = "http://127.0.0.1:3000/movielens/api";
 
 let userRatings = JSON.parse(sessionStorage.getItem("userRatings")) || [];
 //storage type that keeps values when the page is refreshed but clears them when the browser is closed.
-searchMovies();
-getRatedMovies();
-document.getElementById("searchInput").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault(); // Αποτρέπει τυχόν ανεπιθύμητο refresh αν το input είναι μέσα σε form
-        searchMovies();         // Καλεί τη συνάρτηση αναζήτησης
+document.addEventListener("DOMContentLoaded", () => {
+    // Input Keydown
+    document.getElementById("searchInput").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); 
+            searchMovies();         
+        }
+    });
+
+    // Main Buttons
+    document.getElementById("searchBtn").addEventListener("click", searchMovies);
+    document.getElementById("addMovieBtn").addEventListener("click", addMovie);
+    document.getElementById("getRecommendationsBtn").addEventListener("click", getRecommendations);
+    document.getElementById("closeRecommendationsBtn").addEventListener("click", closeRecommendations);
+
+    // Initial Data Loads
+    searchMovies();
+    getRatedMovies();
+});
+
+// --- For Search Movies Table ---
+document.querySelector("#moviesTable").addEventListener("click", function(e) {
+    // Handle "View Ratings" Button Click
+    const viewBtn = e.target.closest(".view-ratings-btn");
+    if (viewBtn) {
+        const movieId = Number(viewBtn.dataset.id);
+        viewRatings(movieId, viewBtn);
+    }
+});
+
+document.querySelector("#moviesTable").addEventListener("change", function(e) {
+    // Handle Star Rating Change
+    if (e.target.classList.contains("star-rating")) {
+        const movieId = Number(e.target.dataset.id);
+        rateMovie(movieId, false, null, e.target); 
+        showSavedMessage(e.target);
+    }
+});
+
+// --- For My Ratings Table ---
+document.querySelector("#myRatingsTable").addEventListener("click", function(e) {
+    // Handle Trash Can Click
+    const removeBtn = e.target.closest(".remove-rating-btn");
+    if (removeBtn) {
+        const movieId = Number(removeBtn.dataset.id);
+        removeRating(movieId);
+    }
+});
+
+document.querySelector("#myRatingsTable").addEventListener("change", function(e) {
+    // Handle Star Rating Update
+    if (e.target.classList.contains("star-rating")) {
+        const movieId = Number(e.target.dataset.id);
+        rateMovie(movieId, true, null, e.target); 
+        showSavedMessage(e.target);
+    }
+});
+
+// --- Hover/Input Logic for ALL Star Ratings ---
+document.body.addEventListener("mousemove", function(e) {
+    if (e.target.classList.contains("star-rating")) {
+        const hoverVal = Math.ceil(((e.clientX - e.target.getBoundingClientRect().left) / e.target.offsetWidth) * 10) / 2;
+        e.target.style.setProperty('--hover-val', hoverVal);
+    }
+});
+
+document.body.addEventListener("mouseleave", function(e) {
+    if (e.target.classList.contains("star-rating")) {
+        e.target.style.setProperty('--hover-val', e.target.value);
+    }
+}, true); // Use capture phase for mouseleave
+
+document.body.addEventListener("input", function(e) {
+    if (e.target.classList.contains("star-rating")) {
+        e.target.style.setProperty('--val', e.target.value);
+        e.target.style.setProperty('--hover-val', e.target.value);
     }
 });
 
@@ -18,10 +88,7 @@ async function searchMovies() {
         const res = await fetch(`${API}/movies?search=${keyword}`);
         const data = await res.json();
 
-        // Ελέγχουμε: 
-        // 1. Αν απέτυχε το request (πχ 404 Not Found ή 500 Server Error) -> !res.ok
-        // 2. Ή αν ήρθε status 200 αλλά η λίστα movies είναι άδεια / δεν υπάρχει -> !data.movies || data.movies.length === 0
-        if (!res.ok || !data.movies || data.movies.length === 0) {
+        if (!data.movies || data.movies.length === 0) {
             tableBody.innerHTML = `
                 <tr>
                     <td colspan="3" style="text-align: center; padding: 20px; color: #fff9dd;">
@@ -31,49 +98,34 @@ async function searchMovies() {
             `;
             return;
         }
-
-        tableBody.innerHTML = ""; // Καθαρίζουμε τα προηγούμενα αποτελέσματα
-
-        tableBody.innerHTML = data.movies.map(m => {
-            return `
-                <tr>
-                    <td>${m.title}</td>
-                    <td>${m.genres}</td>
-                    <td style="text-align: center; vertical-align: middle;">
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                            <input type="range" class="star-rating" min="0" max="5" step="0.5" id="r${m.movieId}" value="0" style="--val: 0;"
-                                onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
-                                onmouseleave="this.style.setProperty('--hover-val', this.value)"
-                                oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
-                                onchange="rateMovie(${m.movieId}, false, null); showSavedMessage(this);">
-                            <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Saved!</span>
-                        </div>
-                    </td>
-                    <td style="text-align: center; vertical-align: middle;">
-                        Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
-                        <button onclick="viewRatings(${m.movieId}, this)" title="View more ratings" style="background: none; border: none; color:rgb(250, 245, 194); font-size: 1.1em; cursor: pointer; padding: 0; margin-top: 8px;">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }).join("");
-
-    } catch (error) {
-        console.error("Σφάλμα κατά την αναζήτηση:", error);
-        tableBody.innerHTML = `
+        tableBody.innerHTML = "";
+        tableBody.innerHTML = data.movies.map(m => `
             <tr>
-                <td colspan="3" style="text-align: center; padding: 20px; color: #ff6b6b;">
-                    Something went wrong while connecting to the server. Check your connection.
+                <td>${m.title}</td>
+                <td>${m.genres}</td>
+                <td style="text-align: center; vertical-align: middle;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                        <input type="range" class="star-rating search-rating" data-id="${m.movieId}" min="0" max="5" step="0.5" id="r${m.movieId}" value="0" style="--val: 0;">
+                        <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Saved!</span>
+                    </div>
+                </td>
+                <td style="text-align: center; vertical-align: middle;">
+                    Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
+                    <button class="view-ratings-btn" data-id="${m.movieId}" title="View more ratings" style="background: none; border: none; color:rgb(250, 245, 194); font-size: 1.1em; cursor: pointer; padding: 0; margin-top: 8px;">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
                 </td>
             </tr>
-        `;
+        `).join("");
+
+    } catch (error) {
+        console.error("Σφάλμα:", error);
+        tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff6b6b;">Server error.</td></tr>`;
     }
 }
 
-function rateMovie(movieId, isUpdate, buttonElement) {
-    const inputId = isUpdate ? `u${movieId}` : `r${movieId}`;
-    const ratingInput = document.getElementById(inputId);
+// NOTE: Passed the `ratingInput` element into this function so we don't need to look it up by ID
+function rateMovie(movieId, isUpdate, buttonElement, ratingInput) {
     const ratingValue = parseFloat(ratingInput.value);
 
     if (isNaN(ratingValue) || ratingValue < 0 || ratingValue > 5) {
@@ -120,18 +172,14 @@ function getRatedMovies(){
                 <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
                     
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                        <input type="range" class="star-rating" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" style="--val: ${r.rating};"
-                            onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
-                            onmouseleave="this.style.setProperty('--hover-val', this.value)"
-                            oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
-                            onchange="rateMovie(${r.movieId}, true, null); showSavedMessage(this);">
+                        <input type="range" class="star-rating update-rating" data-id="${r.movieId}" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" style="--val: ${r.rating};">
                         <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px; pointer-events: none;">Updated!</span>
                     </div>
-
-                    <button onclick="removeRating(${r.movieId})" style="background: none; border: none;font-size: 1.2em; cursor: pointer; padding: 10px 12px; border-radius: 4px;">
+                    
+                    <button class="remove-rating-btn" data-id="${r.movieId}" style="background: none; border: none;font-size: 1.2em; cursor: pointer; padding: 10px 12px; border-radius: 4px;">
                         <i class="fa-regular fa-trash-can" style="color: rgb(207, 213, 137);"></i>
                     </button> 
-                    
+
                 </div>
             </td>
         </tr>

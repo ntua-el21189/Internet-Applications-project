@@ -18,7 +18,7 @@
         Search Movies
     </h2>
     <input type="text" id="searchInput" placeholder="Enter keyword">
-    <button onclick="searchMovies()" title="Search" style="background: none; border: none; color:rgb(255, 251, 210); font-size: 1.2em; cursor: pointer; padding: 0; margin-left: 5px;">
+    <button id="searchBtn" title="Search" style="background: none; border: none; color:rgb(255, 251, 210); font-size: 1.2em; cursor: pointer; padding: 0; margin-left: 5px;">
         <i class="fa-solid fa-magnifying-glass"></i>
     </button>
     <div class="tableFixHeadSearch">
@@ -73,7 +73,7 @@
             </h2>
             <input type="text" id="titleInput" placeholder="Movie Title">
             <input type="text" id="genresInput" placeholder="Genres (Action|Drama)">
-            <button id="addMovieBtn" onclick="addMovie()">Add Movie</button>
+            <button id="addMovieBtn">Add Movie</button>
             <p id="addMovieMsg"></p>
         </div>
 
@@ -92,7 +92,7 @@
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h2 style="color:  #fff9c8; margin: 0;">Your Recommended Movies </h2>
-            <button onclick="closeRecommendations()" title="Close" style="background: none; border: none; color: #fff9dd; font-size: 1.5em; cursor: pointer; padding: 0;">
+            <button id="closeRecommendationsBtn" title="Close" style="background: none; border: none; color: #fff9dd; font-size: 1.5em; cursor: pointer; padding: 0;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
