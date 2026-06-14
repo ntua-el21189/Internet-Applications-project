@@ -3,7 +3,7 @@ const API = "http://127.0.0.1:3000/movielens/api";
 let userRatings = JSON.parse(sessionStorage.getItem("userRatings")) || [];
 //storage type that keeps values when the page is refreshed but clears them when the browser is closed.
 document.addEventListener("DOMContentLoaded", () => {
-    // Input Keydown
+    // Input Keydown (enter for search bar)
     document.getElementById("searchInput").addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
             event.preventDefault(); 
