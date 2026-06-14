@@ -17,11 +17,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 @app.get("/")
-async def search_movies():
+def get_genres():
     return {"genres": VALID_GENRES}
 
 @app.get("/movielens/api/movies")
-async def search_movies(search: str, db: Session = Depends(get_db)):
+def search_movies(search: str, db: Session = Depends(get_db)): 
+    # no need for async await here because i am using synchronous sqlalchemy 
+    #which does not return an awaitable object
     rows = db.execute(
         text("""
             SELECT m.movieId, m.title, m.genres, AVG(r.rating) as avg_rating
@@ -40,7 +42,7 @@ async def search_movies(search: str, db: Session = Depends(get_db)):
     return {"status": 200, "movies": movies}
 
 @app.get("/movielens/api/ratings/{movieId}")
-async def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
+def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
     rows = db.execute(
         text("""
             SELECT userId, rating, timestamp
@@ -58,7 +60,7 @@ async def get_movie_ratings(movieId: int, db: Session = Depends(get_db)):
 
 
 @app.post("/movielens/api/movies")
-async def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
+def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
     input_genres = movie.genres.split('|') 
     for g in input_genres:
         if g not in VALID_GENRES:
@@ -102,7 +104,7 @@ async def add_movie( movie:newMovie ,db: Session = Depends(get_db)):
         )
     
 @app.post("/movielens/api/recommendations")
-async def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db)):
+def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db)):
     my_ratings = {r.movieId: r.rating for r in req.ratings}
     
     if not my_ratings:
