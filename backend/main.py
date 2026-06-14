@@ -140,10 +140,9 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
     for user_id, their_ratings in users_data.items():
         common_movies = my_movies.intersection(their_ratings.keys())
         
-        # --- ΑΛΛΑΓΗ 1: Απαιτούμε τουλάχιστον 2 ΚΟΙΝΕΣ ταινίες για να συγκρίνουμε ---
+        # --- Must have at least two common movies to compare ---
         if len(common_movies) < 2:
             continue
-        
         their_avg = sum(their_ratings.values()) / len(their_ratings)
         user_averages[user_id] = their_avg
 
@@ -165,12 +164,9 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
             continue
             
         sim = numerator / denominator
-        
-        if sim > 0.4: 
-            pearson_similarities[user_id] = sim
-
+        pearson_similarities[user_id] = sim
     # 3. Select the top-K most similar users
-    K = 50
+    K = 10
     sorted_users = sorted(pearson_similarities.items(), key=lambda x: x[1], reverse=True)
     top_k_users = dict(sorted_users[:K])
 
@@ -186,7 +182,7 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
                 continue 
             
             if m not in movie_predictions:
-                # --- ΑΛΛΑΓΗ 2: Κρατάμε ξανά το count για να ξέρουμε πόσοι την πρότειναν ---
+                # --- Κρατάμε ξανά το count για να ξέρουμε πόσοι την πρότειναν ---
                 movie_predictions[m] = {"num": 0.0, "den": 0.0, "count": 0}
             
             movie_predictions[m]["num"] += sim * (rating - their_avg)
@@ -195,7 +191,7 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
 
     final_recommendations = []
     for m, vals in movie_predictions.items():
-        # --- ΑΛΛΑΓΗ 3: Μόνο ταινίες που είδαν τουλάχιστον 2 "παρόμοιοι" ---
+        # --- Μόνο ταινίες που είδαν τουλάχιστον 2 "παρόμοιοι" ---
         if vals["den"] > 0 and vals["count"] >= 2:
             pred_rating = my_avg + (vals["num"] / vals["den"])
             pred_rating = max(0.5, min(5.0, pred_rating))
@@ -206,8 +202,8 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
             })
 
     # 5. Recommend the top-N movies
-    N = 10
-    # --- ΑΛΛΑΓΗ 4: Ισοβαθμία; Βάλε πρώτη την ταινία με τα μεγαλύτερα reviews (count) ---
+    N = 5
+    # --- Ισοβαθμία; Βάλε πρώτη την ταινία με τα μεγαλύτερα reviews (count) ---
     final_recommendations.sort(key=lambda x: (x["predictedRating"], x["count"]), reverse=True)
     top_n = final_recommendations[:N]
 
