@@ -305,7 +305,7 @@ async function getRecommendations() {
         return;
     }
 
-    const btn = document.querySelector("button[onclick='getRecommendations()']");
+    const btn = document.querySelector("#getRecommendationsBtn");
     const originalHTML = btn.innerHTML; // Κρατάμε το εικονίδιο + κείμενο
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Finding...';
     btn.disabled = true; 
