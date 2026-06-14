@@ -326,6 +326,9 @@ async function getRecommendations() {
             body: JSON.stringify(payload)
         });
 
+        if (!res.ok) {
+            throw new Error(`Server responded with Status: ${res.status}`);
+        }
         const data = await res.json();
         const tbody = document.querySelector("#recommendationsTable tbody");
         
@@ -358,6 +361,8 @@ async function getRecommendations() {
 // Συνάρτηση για να κλείνει το Pop-up
 function closeRecommendations() {
     document.getElementById("recommendationsOverlay").style.display = "none";
+    const btn = document.querySelector("#getRecommendationsBtn");
+    btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Get Recommendations';
 }
 
 function showSavedMessage(inputElement) {
