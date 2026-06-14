@@ -4,40 +4,71 @@ let userRatings = JSON.parse(sessionStorage.getItem("userRatings")) || [];
 //storage type that keeps values when the page is refreshed but clears them when the browser is closed.
 searchMovies();
 getRatedMovies();
+document.getElementById("searchInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Αποτρέπει τυχόν ανεπιθύμητο refresh αν το input είναι μέσα σε form
+        searchMovies();         // Καλεί τη συνάρτηση αναζήτησης
+    }
+});
 
 async function searchMovies() {
     const keyword = document.getElementById("searchInput").value;
-
-    const res = await fetch(`${API}/movies?search=${keyword}`);
-    const data = await res.json();
-
     const tableBody = document.querySelector("#moviesTable tbody");
-    tableBody.innerHTML = ""; // Clear previous results
-    
-    tableBody.innerHTML = data.movies.map(m => {
-        return `
+    try {
+        const res = await fetch(`${API}/movies?search=${keyword}`);
+        const data = await res.json();
+
+        // Ελέγχουμε: 
+        // 1. Αν απέτυχε το request (πχ 404 Not Found ή 500 Server Error) -> !res.ok
+        // 2. Ή αν ήρθε status 200 αλλά η λίστα movies είναι άδεια / δεν υπάρχει -> !data.movies || data.movies.length === 0
+        if (!res.ok || !data.movies || data.movies.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 20px; color: #fff9dd;">
+                        We found no movies matching your search. Try a different keyword!
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = ""; // Καθαρίζουμε τα προηγούμενα αποτελέσματα
+
+        tableBody.innerHTML = data.movies.map(m => {
+            return `
+                <tr>
+                    <td>${m.title}</td>
+                    <td>${m.genres}</td>
+                    <td style="text-align: center; vertical-align: middle;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                            <input type="range" class="star-rating" min="0" max="5" step="0.5" id="r${m.movieId}" value="0" style="--val: 0;"
+                                onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
+                                onmouseleave="this.style.setProperty('--hover-val', this.value)"
+                                oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
+                                onchange="rateMovie(${m.movieId}, false, null); showSavedMessage(this);">
+                            <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Saved!</span>
+                        </div>
+                    </td>
+                    <td style="text-align: center; vertical-align: middle;">
+                        Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
+                        <button onclick="viewRatings(${m.movieId}, this)" title="View more ratings" style="background: none; border: none; color:rgb(250, 245, 194); font-size: 1.1em; cursor: pointer; padding: 0; margin-top: 8px;">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Σφάλμα κατά την αναζήτηση:", error);
+        tableBody.innerHTML = `
             <tr>
-                <td>${m.title}</td>
-                <td>${m.genres}</td>
-                <td style="text-align: center; vertical-align: middle;">
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                        <input type="range" class="star-rating" min="0" max="5" step="0.5" id="r${m.movieId}" value="0" style="--val: 0;"
-                            onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
-                            onmouseleave="this.style.setProperty('--hover-val', this.value)"
-                            oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
-                            onchange="rateMovie(${m.movieId}, false, null); showSavedMessage(this);">
-                        <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Saved!</span>
-                    </div>
-                </td>
-                <td style="text-align: center; vertical-align: middle;">
-                    Average Rating: <strong>${m.avg_rating.toFixed(2)}</strong> <br>
-                    <button onclick="viewRatings(${m.movieId}, this)" title="View more ratings" style="background: none; border: none; color:rgb(250, 245, 194); font-size: 1.1em; cursor: pointer; padding: 0; margin-top: 8px;">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                <td colspan="3" style="text-align: center; padding: 20px; color: #ff6b6b;">
+                    Something went wrong while connecting to the server. Check your connection.
                 </td>
             </tr>
         `;
-    }).join("");
+    }
 }
 
 function rateMovie(movieId, isUpdate, buttonElement) {
@@ -53,13 +84,13 @@ function rateMovie(movieId, isUpdate, buttonElement) {
     const title = row.cells[0].innerText.trim();
 
     const existingIndex = userRatings.findIndex(r => r.movieId === movieId);
-    
+
     if (existingIndex !== -1) {
         userRatings[existingIndex].rating = ratingValue;
     } else {
-        userRatings.push({movieId: movieId, title: title, rating: ratingValue });
+        userRatings.push({ movieId: movieId, title: title, rating: ratingValue });
     }
-    sessionStorage.setItem("userRatings", JSON.stringify(userRatings));
+    sessionStorage.setItem("userRatings", JSON.stringify(userRatings)); //την πρώτη φορά που κάνω rate δημιουργείται το item 
     getRatedMovies();
 
     if (buttonElement) {
@@ -69,7 +100,7 @@ function rateMovie(movieId, isUpdate, buttonElement) {
             buttonElement.innerText = originalText;
         }, 500);
     }
-    
+
     console.log("Current Session Ratings:", userRatings);
 }
 
@@ -85,20 +116,36 @@ function getRatedMovies(){
     tbody.innerHTML = userRatings.map(r => `
         <tr>
             <td>${r.title}</td>
-            <td style="text-align: center; vertical-align: middle;">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                    <input type="range" class="star-rating" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" style="--val: ${r.rating};"
-                        onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
-                        onmouseleave="this.style.setProperty('--hover-val', this.value)"
-                        oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
-                        onchange="rateMovie(${r.movieId}, true, null); showSavedMessage(this);">
-                    <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px;">Updated!</span>
+            <td style="vertical-align: middle;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                        <input type="range" class="star-rating" min="0" max="5" step="0.5" id="u${r.movieId}" value="${r.rating}" style="--val: ${r.rating};"
+                            onmousemove="this.style.setProperty('--hover-val', Math.ceil(((event.clientX - this.getBoundingClientRect().left) / this.offsetWidth) * 10) / 2)"
+                            onmouseleave="this.style.setProperty('--hover-val', this.value)"
+                            oninput="this.style.setProperty('--val', this.value); this.style.setProperty('--hover-val', this.value);"
+                            onchange="rateMovie(${r.movieId}, true, null); showSavedMessage(this);">
+                        <span class="save-msg" style="color: #cdc56f; font-size: 0.85em; opacity: 0; transition: opacity 0.3s; position: absolute; bottom: -20px; pointer-events: none;">Updated!</span>
+                    </div>
+
+                    <button onclick="removeRating(${r.movieId})" style="background: none; border: none;font-size: 1.2em; cursor: pointer; padding: 10px 12px; border-radius: 4px;">
+                        <i class="fa-regular fa-trash-can" style="color: rgb(207, 213, 137);"></i>
+                    </button> 
+                    
                 </div>
             </td>
         </tr>
     `).join("");
 }
 
+function removeRating(movieId){
+    const existingIndex = userRatings.findIndex(r => r.movieId === movieId);
+    if (existingIndex !== -1) {
+        userRatings.splice(existingIndex, 1);//go to the index of the rating, delete it and update the sessionstorage
+        sessionStorage.setItem("userRatings", JSON.stringify(userRatings));
+        getRatedMovies();
+    }
+}
 async function addMovie() {
     const title = document.getElementById("titleInput").value;
     const genres = document.getElementById("genresInput").value;

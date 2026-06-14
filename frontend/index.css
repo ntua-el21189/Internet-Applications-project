@@ -58,10 +58,10 @@ button#addMovieBtn ,button#getRecommendationsBtn {
     font-family: Georgia, serif;
     font-size: 14px;
     padding: 8px 12px;
-    border: 1px solid #fff788; 
-    box-shadow: 0px 0px 5px rgba(164, 255, 250, 0.966);
+    border:none;
+    box-shadow: 0px 0px 5px rgba(238, 255, 164, 0.966);
     border-radius: 5px;
-    background-color:rgba(255, 221, 68, 0.757);
+    background-color:rgba(255, 221, 68, 0.741);
     /* background-color:  rgba(253, 236, 85, 0.867); */
     cursor: pointer;
 }
@@ -197,13 +197,16 @@ tr.ratings-drawer td {
     border: none;
 }
 .scroller {
+    border: 0.5px solid #7c5a18;
+    box-shadow: 0 0 7px #fafecbea;
+    padding: 6px;
     width: 100%;
     overflow: hidden; 
-    background: rgba(245, 204, 56, 0.725);
+    background:#ddd05bbe;
     padding: 6px 0;
-    box-shadow: 0px 0px 8px rgb(231, 195, 51);
+    /* box-shadow: 0px 0px 8px rgb(231, 195, 51); */
     border-radius: 9px;
-    border-color: rgb(157, 123, 38);
+    /* border-color: rgb(180, 153, 58); */
 }
 
 .scroller-inner {
