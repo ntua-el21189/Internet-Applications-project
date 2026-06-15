@@ -29,11 +29,15 @@ With the environment active in the backend directory:
 
 pip install -r requirements.txt
 
-4. Move to the frontend directory and use the following command to start a simple http server
+4. To initialize and populate the database move the backend directory and run the following command:
+
+python -m init_db
+
+5. Move to the frontend directory and use the following command to start a simple http server
 
 python -m http.server
 
-5. Move to the backend directory and use the following command to start the backend server 
+6. Move to the backend directory and use the following command to start the backend server 
 
 uvicorn main:app --port 3000
 
