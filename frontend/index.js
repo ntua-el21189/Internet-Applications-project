@@ -311,7 +311,7 @@ async function getRecommendations() {
     btn.disabled = true; 
     
     try {
-        const payload = {
+        const payload = { //in the request body the title must not be included
             ratings: userRatings.map(r => ({
                 movieId: Number(r.movieId),
                 rating: Number(r.rating)
