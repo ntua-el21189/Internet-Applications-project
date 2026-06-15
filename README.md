@@ -36,6 +36,7 @@ python -m http.server
 5. Move to the backend directory and use the following command to start the backend server 
 
 uvicorn main:app --port 3000
+
 To view the APIs documentation head to the following link : http://localhost:3000/docs#/
 
 To make sure both servers function properly go to localhost:8000 where the static page for the front end should be and 
