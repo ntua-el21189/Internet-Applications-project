@@ -268,7 +268,7 @@ h2 button {
 }
 
 /* --- SEARCH BOX --- */
-#searchInput, #titleInput, #genresInput {
+#searchInput,#searchTagInput, #titleInput, #genresInput {
     background-color: transparent; 
     border: 2px solid #fffba6; 
     border-radius: 25px;
@@ -281,12 +281,12 @@ h2 button {
 }
 
 /* Make the placeholder text ("Enter keyword") look a bit softer */
-#searchInput::placeholder, #titleInput::placeholder, #genresInput::placeholder {
+#searchInput::placeholder,#searchTagInput::placeholder, #titleInput::placeholder, #genresInput::placeholder {
     color: #fff9dd; 
 }
 
 /* Add a subtle glow/highlight effect when the user clicks to type */
-#searchInput:focus, #titleInput:focus, #genresInput:focus {
+#searchInput:focus,#searchTagInput:focus, #titleInput:focus, #genresInput:focus {
     background-color: rgba(255, 239, 182, 0.04); /* Adds a very faint white tint when active */
     box-shadow: 0 0 8px rgba(255, 231, 46, 0.928); /* Soft dark green glow */
 }

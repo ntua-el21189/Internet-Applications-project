@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from database import SessionLocal
 from tables import Movie
-from models import newMovie, RecommendationRequest
+from models import newMovie, RecommendationRequest,Tag
 import math
 from fastapi.middleware.cors import CORSMiddleware
 from utils import get_db,VALID_GENRES
@@ -230,3 +230,45 @@ def get_recommendations(req: RecommendationRequest, db: Session = Depends(get_db
         "status": "success",
         "recommendations": top_n_results
     }
+
+#-----------#
+
+
+@app.post("/movielens/api/tags/movies")
+def search_movies_by_tag(tag:Tag , db: Session = Depends(get_db)): 
+    # no need for async await here because i am using synchronous sqlalchemy 
+    #which does not return an awaitable object
+    input_tag = tag.search.strip()
+
+    if len(input_tag) < 5:
+        rows = db.execute(
+            text("""
+                SELECT m.movieId, m.title, m.genres, t.tag
+                FROM movies m JOIN tags t
+                ON m.movieId = t.movieId
+                WHERE LOWER(t.tag) = :input_tag
+                GROUP BY m.movieId, m.title, m.genres, t.tag
+            """),
+            {"input_tag": input_tag.lower()} 
+        ).fetchall()
+    else:
+        prefix = input_tag[:5].lower()
+        rows = db.execute(
+            text("""
+                SELECT m.movieId, m.title, m.genres, t.tag
+                FROM movies m JOIN tags t
+                ON m.movieId = t.movieId
+                WHERE LOWER(t.tag) LIKE :input_tag
+                GROUP BY m.movieId, m.title, m.genres, t.tag
+            """),
+            {"input_tag": f"{prefix}%"} #wildcard to take into account only the first 5
+        ).fetchall()
+
+    movies = [
+        {"movieId": r[0], "title": r[1], "genres": r[2], "matchingTag":r[3]}#handle tags}
+        for r in rows
+    ]
+    return {"status": "success", "movies": movies}
+
+    
+#----------#

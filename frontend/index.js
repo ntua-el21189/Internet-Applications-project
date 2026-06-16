@@ -12,10 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Main Buttons
+    
     document.getElementById("searchBtn").addEventListener("click", searchMovies);
     document.getElementById("addMovieBtn").addEventListener("click", addMovie);
     document.getElementById("getRecommendationsBtn").addEventListener("click", getRecommendations);
     document.getElementById("closeRecommendationsBtn").addEventListener("click", closeRecommendations);
+    //Tag event listener
+    document.getElementById("searchTagBtn").addEventListener("click", searchMoviesbyTags);
 
     // Initial Data Loads
     searchMovies();
@@ -377,3 +380,48 @@ function showSavedMessage(inputElement) {
         }, 1500);
     }
 }
+ //----------//
+
+ 
+// Search Movies by Tags
+async function searchMoviesbyTags() {
+    const keyword = document.getElementById("searchTagInput").value; // Fixed ID
+    const tableBody = document.querySelector("#TagTable tbody"); // Fixed ID
+    
+    try {
+        const res = await fetch(`${API}/tags/movies`, { // Adjust ${API} prefix if needed
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ search: keyword })
+        });
+        
+        const data = await res.json();
+
+        if (!data.movies || data.movies.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 20px; color: #fff9dd;">
+                        We found no movies matching the tags you searched. Try a different tag!
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tableBody.innerHTML = data.movies.map(m => `
+            <tr>
+                <td>${m.title}</td>
+                <td>${m.genres}</td>
+                <td>${m.matchingTag}</td> 
+            </tr>
+        `).join("");
+
+    } catch (error) {
+        console.error("Σφάλμα:", error);
+        tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff6b6b;">Server error.</td></tr>`;
+    }
+}
+
+//----------//

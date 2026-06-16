@@ -11,7 +11,7 @@
 <h1 style="color:#fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;"> 
         Movie Recs 
     <i class="fa-solid fa-film" style="color:rgba(255, 238, 105, 0.823);" ></i>
-    </h1>
+</h1>
 <div class="two-columns">
   <section id="search">
     <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
@@ -113,6 +113,31 @@
     </div>
 </div>
 
+<!-- ----------NEW CODE -->
+ 
+<section id="tag" style="margin-left: 60px; margin-right: 60px; margin-bottom: 30px;">
+    <h2 style="color: #fff9c8; display: flex; align-items: center; justify-content: flex-start; gap: 10px;">
+        Search Movies by Keyword
+    </h2>
+    <input type="text" id="searchTagInput" placeholder="Enter keyword (e.g., matrix)">
+    <button id="searchTagBtn" title="Search Tags" style="background: none; border: none; color:rgb(255, 251, 210); font-size: 1.2em; cursor: pointer; padding: 0; margin-left: 5px;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    <div class="tableFixHeadSearch">
+        <table id="TagTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Genres</th>
+                    <th>Matched Tag</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ---------- NEW CODE  -->
 <script src="index.js"></script>
 </body>
 </html>

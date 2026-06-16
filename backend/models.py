@@ -18,3 +18,9 @@ class UserRating(BaseModel):
 
 class RecommendationRequest(BaseModel):
     ratings: List[UserRating]
+
+#-----------#
+class Tag(BaseModel):
+    search: str
+
+#----------#
