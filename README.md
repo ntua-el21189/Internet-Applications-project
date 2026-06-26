@@ -4,7 +4,7 @@ This website helps users find movies they would like by comparing their rated mo
 
 ## Demo
 
-![Demo](MovieRecs.gif)
+![Demo](demo.gif)
 
 ## Τεχνολογίες που χρησιμοποιήθηκαν
 * **Backend:** Python 3, FastAPI, Uvicorn, Pydantic,SQLAlchemy
