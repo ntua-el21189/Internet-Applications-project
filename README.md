@@ -2,6 +2,10 @@
 
 This website helps users find movies they would like by comparing their rated movies to users with similar interests.
 
+## Demo
+
+![Demo](MovieRecs.gif)
+
 ## Τεχνολογίες που χρησιμοποιήθηκαν
 * **Backend:** Python 3, FastAPI, Uvicorn, Pydantic,SQLAlchemy
 * **Βάση Δεδομένων:** SQLite3
